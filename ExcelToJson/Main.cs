@@ -1,9 +1,8 @@
-﻿using System;
-using AppKit;
+﻿using AppKit;
 
 namespace ExcelToJson {
-    static class MainClass {
-        static void Main(string[] args) {
+    internal static class MainClass {
+        private static void Main(string[] args) {
             NSApplication.Init();
             NSApplication.Main(args);
         }

@@ -4,4 +4,5 @@
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;
   &lt;Assembly Path="/Users/kurotigerx/Glaciwaker/AlienBaker/AlienBakerClient/Library/ScriptAssemblies/Assembly-CSharp.dll" /&gt;
   &lt;Assembly Path="/Users/kurotigerx/Glaciwaker/AlienBaker/AlienBakerClient/Library/ScriptAssemblies/Enum.dll" /&gt;
+  &lt;Assembly Path="/Users/kurotigerx/RiderProjects/ExcelToJson/Mac_ExcelToJson/ExcelToJson/bin/Debug/Enum.dll" /&gt;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>

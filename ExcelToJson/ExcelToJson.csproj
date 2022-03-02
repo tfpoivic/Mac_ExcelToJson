@@ -52,7 +52,7 @@
           <Private>True</Private>
         </Reference>
         <Reference Include="Enum, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\..\Glaciwaker\AlienBaker\AlienBakerClient\Library\ScriptAssemblies\Enum.dll</HintPath>
+          <HintPath>..\..\..\..\Glaciwaker\AlienBaker\AlienBakerClient\Library\ScriptAssemblies\Enum.dll</HintPath>
         </Reference>
         <Reference Include="ICSharpCode.SharpZipLib, Version=1.3.2.10, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
           <HintPath>..\packages\SharpZipLib.1.3.2\lib\netstandard2.1\ICSharpCode.SharpZipLib.dll</HintPath>
