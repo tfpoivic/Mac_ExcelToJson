@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Script.Data.Table;
 
 namespace ExcelToJson {
     /// <summary>
@@ -90,12 +91,11 @@ namespace ExcelToJson {
             #region 確認各欄位和要被寫入的物件欄位Type有對應
 
             var checkObject = Activator.CreateInstance(dataConvertInfo.ClassType);
-            var tableTypeEnumerator = allType.GetEnumerator();
             var isConform = CheckObjectTypeCorrect(
                 dataConvertInfo.ClassType,
                 checkObject,
-                ref titleNames,
-                ref tableTypeEnumerator
+                titleNames,
+                allType
             );
             if (!isConform) {
                 _debugMessage =
@@ -169,20 +169,18 @@ namespace ExcelToJson {
         private bool CheckObjectTypeCorrect(
             IReflect checkType,
             object checkObject,
-            ref List<string> titleNames,
-            ref List<string>.Enumerator tableTypeEnumerator
+            IReadOnlyList<string> titleNames,
+            IReadOnlyList<string> tableTypeEnumerator
         ) {
-            Console.WriteLine($"type is {checkType}");
             var allFieldInfo = checkType.GetFields(BindingFlags.Public | BindingFlags.Instance);
             var titleToFieldInfo =
                 allFieldInfo.ToDictionary(
                     fieldInfo => fieldInfo.GetCustomAttribute<TitleName>()?.GetTitle() ?? fieldInfo.Name
                 );
-
             for (var index = 0; index < titleNames.Count; index++) {
                 var titleName = titleNames[index];
+                var tableType = tableTypeEnumerator[index];
                 if (!titleToFieldInfo.TryGetValue(titleName, out var fieldInfo)) {
-                    tableTypeEnumerator.MoveNext();
                     continue;
                 }
 
@@ -199,13 +197,12 @@ namespace ExcelToJson {
                     continue;
                 }
 
-                var isConform = CheckBaseTypeCorrect(curType, ref tableTypeEnumerator);
-
+                var isConform = CheckBaseTypeCorrect(curType, tableType);
+                
                 if (isConform) {
                     continue;
                 }
 
-                Console.WriteLine($"type = {checkType} excelType = {tableTypeEnumerator.Current}");
                 return false;
             }
 
@@ -216,14 +213,9 @@ namespace ExcelToJson {
         /// 確認excel表格內定義的Type是否和給予的基本資料結構有對應
         /// </summary>
         /// <param name="checkType">給予的type定義</param>
-        /// <param name="tableTypeEnumerator">table內文</param>
+        /// <param name="tableType">table內文</param>
         /// <returns>是否有對應</returns>
-        private bool CheckBaseTypeCorrect(Type checkType, ref List<string>.Enumerator tableTypeEnumerator) {
-            Console.WriteLine($"Type is {checkType}");
-            if (!tableTypeEnumerator.MoveNext()) {
-                // 沒有下一個，表示沒有對應
-                return true;
-            }
+        private bool CheckBaseTypeCorrect(Type checkType, string tableType) {
 
             // 由於可能有nullable型態，取得對應的非nullable型態再比較
             var isNullableType = checkType.IsGenericType && checkType.GetGenericTypeDefinition() == typeof(Nullable<>);
@@ -231,18 +223,18 @@ namespace ExcelToJson {
 
             if (realType != null && _baseTypeString.TryGetValue(realType, out var compareStr)) // 是基本四型態之一
             {
-                if (tableTypeEnumerator.Current != null
-                    && tableTypeEnumerator.Current.ToUpper().Equals(compareStr.ToUpper())) {
+                if (tableType != null
+                    && tableType.ToUpper().Equals(compareStr.ToUpper())) {
                     return true;
                 }
 
-                Console.WriteLine("base error : Type = {0} excelType = {1}", realType, tableTypeEnumerator.Current);
+                Console.WriteLine($"base error : Type = {realType} excelType = {tableType}");
                 _debugMessage =
-                    $"{_debugMessage} base error : Type = {realType} excelType = {tableTypeEnumerator.Current}";
+                    $"{_debugMessage} base error : Type = {realType} excelType = {tableType}";
                 return false;
             }
 
-            Console.WriteLine("not base error : Type = {0}", realType);
+            Console.WriteLine($"not base error : Type = {realType}");
             _debugMessage = $"{_debugMessage} not base error : Type = {realType}";
             return false;
         }

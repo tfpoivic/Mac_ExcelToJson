@@ -118,7 +118,6 @@ namespace ExcelToJson {
             readExcelToJsonStringError = GetTableIgnoreColumn(nrs);
             if (readExcelToJsonStringError != ReadExcelToJsonStringError.NONE) { return readExcelToJsonStringError; }
 
-            DeleteIgnoreCol(ref allType);
             result = _dontNeedColumnIndexes;
             return ReadExcelToJsonStringError.NONE;
         }
@@ -140,7 +139,8 @@ namespace ExcelToJson {
                 if (getData.Count <= 0 || string.IsNullOrEmpty(getData[0]) || !getData[0].Equals(StartOfTable)) {
                     continue;
                 }
-                    // [0] = "#" 所以從第一個開始檢查
+
+                // [0] = "#" 所以從第一個開始檢查
                 for (_columnCount = 1; _columnCount < getData.Count; ++_columnCount) {
                     if (!string.IsNullOrEmpty(getData[_columnCount]) && getData[_columnCount].Equals(EndOfColumn)) {
                         break;
@@ -216,12 +216,15 @@ namespace ExcelToJson {
                 if (string.IsNullOrEmpty(ignoreColumnData[col])) {
                     return ReadExcelToJsonStringError.INSTRUCT_IGNORE_COL_NOT_ENOUGH;
                 } // column數量不正確
+
                 if (!(ignoreColumnData[col].ToUpper().Equals(NeedReadSiteIsAll)
                       || (ignoreColumnData[col].ToUpper().Equals(NeedReadSiteIsServer) && nrs == NeedReadSite.SERVER)
-                      || (ignoreColumnData[col].ToUpper().Equals(NeedReadSiteIsClient) && nrs == NeedReadSite.CLIENT))) {
+                      || (ignoreColumnData[col].ToUpper().Equals(NeedReadSiteIsClient)
+                          && nrs == NeedReadSite.CLIENT))) {
                     _dontNeedColumnIndexes.Add(col);
                 }
             }
+
             return ReadExcelToJsonStringError.NONE;
         }
 
@@ -293,27 +296,12 @@ namespace ExcelToJson {
 
             var realColumnCount = (_columnCount == 0) ? currentRow.LastCellNum : _columnCount;
             for (var colCount = 0; colCount < realColumnCount; ++colCount) {
-                if (!_dontNeedColumnIndexes.Contains(colCount)) {
-                    retStrList.Add(
-                        (currentRow.GetCell(colCount) == null) ? null : currentRow.GetCell(colCount).ToString()
-                    );
-                }
+                retStrList.Add(
+                    (currentRow.GetCell(colCount) == null) ? null : currentRow.GetCell(colCount).ToString()
+                );
             }
 
             return retStrList;
-        }
-
-        /// <summary>
-        /// 刪除忽略資料
-        /// </summary>
-        /// <param name="waitDeleteData">準備要被刪除的資料</param>
-        private void DeleteIgnoreCol(ref List<string> waitDeleteData) {
-            // 由於先讀type，再讀忽略欄位index，所以得再此才能依據忽略的欄位index調整allType
-            _dontNeedColumnIndexes.Sort();
-            for (var index = _dontNeedColumnIndexes.Count - 1; index >= 0; --index) // 由大往小刪除，避免刪錯
-            {
-                waitDeleteData.RemoveAt(_dontNeedColumnIndexes[index]);
-            }
         }
 
         #endregion

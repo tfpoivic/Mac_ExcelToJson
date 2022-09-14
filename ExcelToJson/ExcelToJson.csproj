@@ -51,9 +51,6 @@
           <HintPath>..\packages\Portable.BouncyCastle.1.8.9\lib\netstandard2.0\BouncyCastle.Crypto.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="Enum, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\..\..\Glaciwaker\AlienBaker\AlienBakerClient\Library\ScriptAssemblies\Enum.dll</HintPath>
-        </Reference>
         <Reference Include="ICSharpCode.SharpZipLib, Version=1.3.2.10, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
           <HintPath>..\packages\SharpZipLib.1.3.2\lib\netstandard2.1\ICSharpCode.SharpZipLib.dll</HintPath>
           <Private>True</Private>
@@ -121,6 +118,9 @@
         <Reference Include="System.Security.Principal.Windows, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
           <HintPath>..\packages\System.Security.Principal.Windows.5.0.0\lib\netstandard2.0\System.Security.Principal.Windows.dll</HintPath>
           <Private>True</Private>
+        </Reference>
+        <Reference Include="Table, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\..\..\..\Glaciwaker\MemorySpirit\Library\ScriptAssemblies\Table.dll</HintPath>
         </Reference>
         <Reference Include="Xamarin.Essentials, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\packages\Xamarin.Essentials.1.7.1\lib\xamarinmac20\Xamarin.Essentials.dll</HintPath>

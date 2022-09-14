@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using Script.Data.Table;
 
 namespace ExcelToJson {
     public class ExcelToJson {
@@ -21,18 +22,18 @@ namespace ExcelToJson {
         // TODO:產生server和client檔案的區別
         public void TransferFilesFromExcelToJson(string excelDir, string jsonDir) {
             var clientDir = jsonDir + "//client";
-            var serverDir = jsonDir + "//server";
+            // var serverDir = jsonDir + "//server";
             if (!Directory.Exists(jsonDir)) // 如果資料夾不存在
             {
                 Directory.CreateDirectory(jsonDir); // 建立目錄
                 Directory.CreateDirectory(jsonDir + "//server"); // 建立目錄
-                Directory.CreateDirectory(jsonDir + "//client"); // 建立目錄
+                // Directory.CreateDirectory(jsonDir + "//client"); // 建立目錄
             }
 
-            if (!Directory.Exists(serverDir)) // 如果資料夾不存在
-            {
-                Directory.CreateDirectory(serverDir); // 建立目錄
-            }
+            // if (!Directory.Exists(serverDir)) // 如果資料夾不存在
+            // {
+            //     Directory.CreateDirectory(serverDir); // 建立目錄
+            // }
 
             if (!Directory.Exists(clientDir)) // 如果資料夾不存在
             {
@@ -75,37 +76,37 @@ namespace ExcelToJson {
                 }
 
                 #endregion
-
-                #region server
-
-                var isSuccessGetAttr2 = GetAttribute(dlt, out EnumClassValue dataConvertInfo2);
-                if (!isSuccessGetAttr2) { continue; }
-
-                _excelToJsonString.ReadExcelFile(
-                    excelDir,
-                    dataConvertInfo2,
-                    NeedReadSite.SERVER,
-                    out var dataJsonString2,
-                    out tempDebugMsg
-                );
-
-
-                if (error == ReadExcelToJsonStringError.NONE) {
-                    var jsonFilePath2 =
-                        serverDir + Path.DirectorySeparatorChar + dataConvertInfo2.FileName + JsonExt;
-                    WriteJsonStringToFile(dataJsonString2, jsonFilePath2);
-
-                    debugMsgBuilder.AppendLine(string.Format("將 {0} 資料轉換成json成功", excelFilePath));
-                    FileListMessage = string.Format("{0}{1}：O\n", FileListMessage, dataConvertInfo2.FileName);
-                    ++successFileCount;
-                } else {
-                    debugMsgBuilder.AppendLine(
-                        string.Format("取得{0}內資料(型別為{1})失敗：失敗原因：{2}", excelFilePath, dataConvertInfo.ClassType, error)
-                    );
-                    FileListMessage = string.Format("{0}{1}：X\r\n", FileListMessage, dataConvertInfo2.FileName);
-                }
-
-                #endregion
+                //
+                // #region server
+                //
+                // var isSuccessGetAttr2 = GetAttribute(dlt, out EnumClassValue dataConvertInfo2);
+                // if (!isSuccessGetAttr2) { continue; }
+                //
+                // _excelToJsonString.ReadExcelFile(
+                //     excelDir,
+                //     dataConvertInfo2,
+                //     NeedReadSite.SERVER,
+                //     out var dataJsonString2,
+                //     out tempDebugMsg
+                // );
+                //
+                //
+                // if (error == ReadExcelToJsonStringError.NONE) {
+                //     var jsonFilePath2 =
+                //         serverDir + Path.DirectorySeparatorChar + dataConvertInfo2.FileName + JsonExt;
+                //     WriteJsonStringToFile(dataJsonString2, jsonFilePath2);
+                //
+                //     debugMsgBuilder.AppendLine(string.Format("將 {0} 資料轉換成json成功", excelFilePath));
+                //     FileListMessage = string.Format("{0}{1}：O\n", FileListMessage, dataConvertInfo2.FileName);
+                //     ++successFileCount;
+                // } else {
+                //     debugMsgBuilder.AppendLine(
+                //         string.Format("取得{0}內資料(型別為{1})失敗：失敗原因：{2}", excelFilePath, dataConvertInfo.ClassType, error)
+                //     );
+                //     FileListMessage = string.Format("{0}{1}：X\r\n", FileListMessage, dataConvertInfo2.FileName);
+                // }
+                //
+                // #endregion
             }
 
             debugMsgBuilder.AppendLine(
