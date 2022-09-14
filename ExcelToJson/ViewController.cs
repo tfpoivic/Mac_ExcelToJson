@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using AppKit;
-using Foundation;
-using MobileCoreServices;
 using Xamarin.Essentials;
 
 namespace ExcelToJson {
@@ -15,26 +11,12 @@ namespace ExcelToJson {
         
         public ViewController(IntPtr handle) : base(handle) { }
 
-        public override void ViewDidLoad() {
-            base.ViewDidLoad();
-            // Do any additional setup after loading the view.
-        }
-
-        public override NSObject RepresentedObject {
-            get { return base.RepresentedObject; }
-            set {
-                base.RepresentedObject = value;
-                // Update the view, if already loaded.
-            }
-        }
-
-        static FilePickerFileType PlatformXlsxFileType() =>
+        private static FilePickerFileType PlatformXlsxFileType() =>
             new FilePickerFileType(
-                new Dictionary<DevicePlatform, IEnumerable<string>> {{DevicePlatform.macOS, new string[] {".xlsx"}}}
+                new Dictionary<DevicePlatform, IEnumerable<string>> {{DevicePlatform.macOS, new[] {".xlsx"}}}
             );
 
-        partial void selectInputPath(AppKit.NSButtonCell sender) {
-            Console.WriteLine("select");
+        partial void selectInputPath(NSButtonCell sender) {
             try {
                 var inputPath = FilePicker.PickAsync(
                         new PickOptions {FileTypes = PlatformXlsxFileType()}
@@ -54,17 +36,17 @@ namespace ExcelToJson {
                 return;
             }
             logTextView.Value = "產檔中…";
-            convertExcelToJson();
+            ConvertExcelToJson();
         }
 
-        private async void convertExcelToJson() {
-            ExcelToJson etj = new ExcelToJson();
+        private async void ConvertExcelToJson() {
+            var excelToJson = new ExcelToJson();
             await Task.Run(
                 () => {
-                    etj.TransferFilesFromExcelToJson(_filePath, _filePath);
+                    excelToJson.TransferFilesFromExcelToJson(_filePath, _filePath);
                 }
             );
-            logTextView.Value = etj.DebugMessage;
+            logTextView.Value = excelToJson.DebugMessage;
         }
     }
 }
